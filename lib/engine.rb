@@ -1,3 +1,4 @@
+require 'logger'
 
 class Phase
   
@@ -21,12 +22,23 @@ end
 
 class Engine
   
+  include Rubygame::NamedResource
+  
+  IMAGES_DIR = "./images"
+  DATA_DIR = "./data"
+  Engine.autoload_dirs = [ IMAGES_DIR, DATA_DIR ]
+  
   attr_reader :screen
+  attr_reader :dirs
+  attr_reader :logger
   
   def initialize(screen)
     @screen = screen
     @phases = []
+    @images = {}
     @current_phase_index = 0
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::DEBUG
   end
   
   def current_phase
@@ -39,6 +51,24 @@ class Engine
     return nil if @phases.empty?
     @current_phase_index = (@current_phase_index + 1) % @phases.size
   end
+  
+  def image_for(filename, auto_colorkey=true, auto_convert=true)
+    return nil unless filename
+    unless @images.has_key?(filename)
+      begin
+        fullpath = find_file(filename)
+        img = Rubygame::Surface.load(fullpath)
+      rescue Rubygame::SDLError
+        @logger.fatal("Error loading '#{filename}': #{$!}")
+      end
+      img = img.convert if auto_convert
+      @images[filename] = img
+      if auto_colorkey
+        img.set_colorkey( img.get_at( [0,0] ))
+      end
+    end
+    return @images[filename]
+  end 
   
   def run
     @running = true

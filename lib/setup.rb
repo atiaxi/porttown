@@ -28,6 +28,9 @@ def start_porttown
   screen.title = "Port Town"
   
   engine = Engine.new(screen)
+  
+  
+  
   engine.current_phase = 3
   engine.run
 end
