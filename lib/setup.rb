@@ -15,23 +15,23 @@ rescue LoadError
 end
 
 require 'engine'
-
-def setup_pirates
-  
-end
+require 'placement'
 
 def start_porttown
   Rubygame.init
   Rubygame::TTF.setup()
-  flags = Rubygame::DOUBLEBUF | Rubygame::HWSURFACE
-  screen = Rubygame::Screen.new( [ 800, 600], 0, flags)
-  screen.title = "Port Town"
   
-  engine = Engine.new(screen)
+  engine = Engine.instance
+  engine.screen.title = "Port Town"
+  # TODO: Command line parsing and such.  For now, we do whatever the default
+  # map says
+  map = engine.yaml_for("pirates.yml")
   
+  placement_phases = map.active_players.collect do | p |
+    PlacementPhase.new(map, p)
+  end
   
-  
-  engine.current_phase = 3
+  engine.add_phases(placement_phases)
   engine.run
 end
 

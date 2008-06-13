@@ -1,0 +1,136 @@
+--- !ruby/object:Map 
+hotspots: 
+- &id001 !ruby/object:Hotspot 
+  base: 0
+  connected_to: 
+  - &id009 !ruby/object:Hotspot 
+    connected_to: 
+    - *id001
+    - &id002 !ruby/object:Hotspot 
+      connected_to: 
+      - *id009
+      - *id001
+      - &id008 !ruby/object:Hotspot 
+        connected_to: 
+        - *id002
+        - &id003 !ruby/object:Hotspot 
+          connected_to: 
+          - *id008
+          - &id010 !ruby/object:Hotspot 
+            connected_to: 
+            - *id003
+            forces: []
+
+            name: Graveyard
+            spawnpoint: 
+            x: 100
+            y: 50
+          - &id005 !ruby/object:Hotspot 
+            connected_to: 
+            - *id002
+            - *id003
+            - &id006 !ruby/object:Hotspot 
+              connected_to: 
+              - &id004 !ruby/object:Hotspot 
+                connected_to: 
+                - *id006
+                - &id007 !ruby/object:Hotspot 
+                  connected_to: 
+                  - *id004
+                  - *id005
+                  forces: 
+                  - 
+                  - 
+                  - 10
+                  name: Marketplace
+                  spawnpoint: 
+                  x: 700
+                  y: 175
+                forces: 
+                - 
+                - 
+                - 3
+                name: Nobles' Residences
+                spawnpoint: 
+                x: 610
+                y: 75
+              - *id005
+              forces: 
+              - 
+              - 
+              - 1
+              name: Mayor's Villa
+              spawnpoint: 
+              x: 390
+              y: 75
+            - *id007
+            forces: 
+            - 
+            - 
+            - 6
+            name: Main Street
+            spawnpoint: 
+            x: 400
+            y: 200
+          forces: 
+          - 
+          - 
+          - 6
+          name: Church
+          spawnpoint: 
+          x: 100
+          y: 200
+        forces: 
+        - 
+        - 
+        - 4
+        name: Town Watch
+        spawnpoint: 
+        x: 100
+        y: 295
+      - *id005
+      forces: 
+      - 
+      - 
+      - 4
+      name: Slums
+      spawnpoint: 
+      x: 500
+      y: 300
+    forces: 
+    - 
+    - 
+    - 3
+    name: Tavern
+    spawnpoint: 
+    x: 600
+    y: 300
+  - *id002
+  forces: 
+  - 6
+  name: Pirate Ship
+  spawnpoint: 
+  x: 400
+  y: 380
+- *id009
+- *id002
+- *id008
+- *id003
+- *id010
+- *id006
+- *id004
+- *id007
+- *id005
+players: 
+- !ruby/object:Player 
+  controller: :person
+  name: Pirates
+  side: 0
+- !ruby/object:Player 
+  controller: :person
+  name: Zombies
+  side: 1
+- !ruby/object:Player 
+  controller: :neutral
+  name: Civilians
+  side: 2

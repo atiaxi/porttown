@@ -1,9 +1,13 @@
+require 'model'
+
 require 'logger'
+require 'yaml'
+require 'singleton'
 
 class Phase
   
-  def initialize(engine)
-    @driver = engine
+  def initialize()
+    @engine = Engine.instance
   end
   
   def click(loc)
@@ -21,7 +25,7 @@ class Phase
 end
 
 class Engine
-  
+  include Singleton
   include Rubygame::NamedResource
   
   IMAGES_DIR = "./images"
@@ -32,14 +36,25 @@ class Engine
   attr_reader :dirs
   attr_reader :logger
   
-  def initialize(screen)
-    @screen = screen
+  def initialize()
+    flags = Rubygame::DOUBLEBUF | Rubygame::HWSURFACE
+    @screen = Rubygame::Screen.new( [ 800, 600], 0, flags)
     @phases = []
     @images = {}
+    @fonts = {}
     @current_phase_index = 0
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
   end
+  
+  def add_phase(phase)
+    @phases << phase
+  end
+  
+  def add_phases(anArray)
+    @phases += anArray
+  end
+  
   
   def current_phase
     return nil if @phases.empty?
@@ -52,11 +67,21 @@ class Engine
     @current_phase_index = (@current_phase_index + 1) % @phases.size
   end
   
+  def font_for(filename, size=16)
+    data = [filename, size]
+    return @fonts[data] if @fonts.has_key?(data)
+    
+    fullpath = Engine.find_file(filename)
+    result = Rubygame::TTF.new(fullpath, size)
+    @fonts[data] = result
+    return result
+  end
+  
   def image_for(filename, auto_colorkey=true, auto_convert=true)
     return nil unless filename
     unless @images.has_key?(filename)
       begin
-        fullpath = find_file(filename)
+        fullpath = Engine.find_file(filename)
         img = Rubygame::Surface.load(fullpath)
       rescue Rubygame::SDLError
         @logger.fatal("Error loading '#{filename}': #{$!}")
@@ -68,7 +93,7 @@ class Engine
       end
     end
     return @images[filename]
-  end 
+  end
   
   def run
     @running = true
@@ -89,14 +114,19 @@ class Engine
       end
       
       @screen.fill(Rubygame::Color[:black])
-      # TODO: Draw screen
+      phase.draw(@screen)
       @screen.flip
       elapsed = clock.tick
       # TODO: Updates
       
-      Rubygame::Clock.wait(0.05)
+      Rubygame::Clock.wait(200)
     end
     Rubygame::quit
+  end
+  
+  def yaml_for(filename)
+    fullpath = Engine.find_file(filename)
+    return YAML::load_file(fullpath)
   end
   
 end

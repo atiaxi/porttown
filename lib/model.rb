@@ -35,6 +35,10 @@ class Hotspot
     return @forces.fetch(player.side, 0)
   end
   
+  def loc=(anArray)
+    @x,@y = anArray
+  end
+  
   def reinforce(player, amount)
     initial = forces_for(player)
     @forces[player.side] = initial+amount
@@ -44,9 +48,16 @@ end
 
 class Map
   
+  attr_reader :players
+  attr_reader :hotspots
+  
   def initialize
     @hotspots = []
     @players = []
+  end
+  
+  def active_players
+    return @players.select { |p| p.controller != :neutral }
   end
   
   def add_hotspot(spot)

@@ -22,45 +22,54 @@ def main
   ship = Hotspot.new("Pirate Ship")
   ship.base_of(pirates)
   ship.reinforce(pirates,6)
+  ship.loc = [400,380]
   map.add_hotspot(ship)
   
   tavern = Hotspot.new("Tavern")
   tavern.connect_to(ship)
   tavern.reinforce(neutral, 3)
-  map.add_hotspot(tavern)  
+  tavern.loc = [600, 300]
+  map.add_hotspot(tavern)
   
   slums = Hotspot.new("Slums")
   slums.connect_to(tavern)
   slums.connect_to(ship)
   slums.reinforce(neutral, 4)
+  slums.loc = [500, 300]
   map.add_hotspot(slums)
   
   watch = Hotspot.new("Town Watch")
   watch.connect_to(slums)
   watch.reinforce(neutral, 4)
+  watch.loc = [ 100, 295 ]
   map.add_hotspot(watch)
   
   church = Hotspot.new("Church")
   church.connect_to(watch)
   church.reinforce(neutral, 6)
+  church.loc = [100, 200 ]
   map.add_hotspot(church)
   
   graveyard = Hotspot.new("Graveyard")
   graveyard.connect_to(church)
+  graveyard.loc = [100, 50 ]
   map.add_hotspot(graveyard)
   
   mayor = Hotspot.new("Mayor's Villa")
   mayor.reinforce(neutral, 1)
+  mayor.loc = [390, 75 ]
   map.add_hotspot(mayor)
   
   nobles = Hotspot.new("Nobles' Residences")
   nobles.connect_to(mayor)
   nobles.reinforce(neutral, 3)
+  nobles.loc = [610, 75]
   map.add_hotspot(nobles)
   
   market = Hotspot.new("Marketplace")
   market.connect_to(nobles)
   market.reinforce(neutral, 10)
+  market.loc = [700, 175 ]
   map.add_hotspot(market)
   
   main_street = Hotspot.new("Main Street")
@@ -69,9 +78,10 @@ def main
   main_street.connect_to(mayor)
   main_street.connect_to(market)
   main_street.reinforce(neutral, 6)
+  main_street.loc = [400, 200]
   map.add_hotspot(main_street)
   
-  puts map.to_yaml
+  puts YAML::dump(map)
   
 end
 
