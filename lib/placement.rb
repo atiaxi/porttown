@@ -4,13 +4,14 @@ require 'controller'
 
 class MessageQueueView < Widget
   
-  def initialize(offset, width)
+  def initialize(offset, width, queue)
     super()
     @offset = offset
     @rect.x = offset[0]
     @rect.y = offset[1]
     @rect.w = width
     @labels = []
+    @queue = queue
     setup_labels
   end
   
@@ -22,8 +23,7 @@ class MessageQueueView < Widget
   def setup_labels
     @labels = []
     h = 0
-    messages = Engine.instance.messages
-    messages.each do | message |
+    @queue.each do | message |
       label = Label.new(message.to_s)
       label.rect.x = @rect.x
       label.rect.y = @rect.y + (@labels.size * label.rect.h)
@@ -154,7 +154,7 @@ class PlacementPhase < Phase
     @spawnLabel.rect.centerx = @turnLabel.rect.centerx
     @widgets << @spawnLabel
 
-    @mqv = MessageQueueView.new([1,1], @engine.screen.w - 2)
+    @mqv = MessageQueueView.new([1,1], @engine.screen.w - 2, @engine.messages)
     @widgets << @mqv
   end
   

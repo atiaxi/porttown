@@ -19,8 +19,9 @@ hotspots:
           - &id010 !ruby/object:Hotspot 
             connected_to: 
             - *id003
-            forces: []
-
+            forces: 
+            - 
+            - 6
             name: Graveyard
             spawnpoint: 
             x: 100
