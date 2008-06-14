@@ -5,15 +5,17 @@ require 'yaml'
 $: << 'lib'
 require 'model'
 
-def main
+def piratesVzombies 
   map = Map.new
   
   pirates = Player.new(0, 'Pirates')
   pirates.controller = :person
   pirates.spawn_roll = 3
+  pirates.dice_to_roll = 2
   zombies = Player.new(1, 'Zombies')
   zombies.controller = :person
   zombies.spawn_roll = 6
+  zombies.dice_to_roll = 1
   neutral = Player.new(2, 'Civilians')
   neutral.controller = :neutral
   
@@ -55,6 +57,7 @@ def main
   graveyard = Hotspot.new("Graveyard")
   graveyard.connect_to(church)
   graveyard.loc = [100, 70 ]
+  graveyard.base_of(zombies)
   graveyard.reinforce(zombies, 6)
   map.add_hotspot(graveyard)
   
@@ -84,7 +87,12 @@ def main
   main_street.loc = [400, 200]
   map.add_hotspot(main_street)
   
-  puts YAML::dump(map)
+  return map
+end
+
+def main
+  
+  puts YAML::dump(piratesVzombies)
   
 end
 

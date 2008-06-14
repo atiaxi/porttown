@@ -1,34 +1,48 @@
 
-class Message
+class FightController
   
-  include Comparable
-  
-  attr_accessor :time
-  attr_accessor :msg
-  
-  def initialize(message, display_for=2.0)
-    @msg = message
-    @time = display_for
+  def initialize(map)
+    @map = map
   end
   
-  def <=>(other)
-    return self.time <=> other.time
+  def test_for_elimination
+    @map.active_players.dup.each do |player|
+      @map.eliminate_player(player) if @map.eliminate_player?(player)
+    end
   end
   
-  def as_message
-    return self
+  def fight
+    log = Engine.instance.logger
+    
+    @map.hotspots.each do | spot |
+      original_forces = spot.forces.dup
+      log.info("Fighting begins in #{spot.name}")
+      @map.active_players.each do | player |
+        other_players = @map.other_players(player)
+        times = 0
+        while times < spot.forces_for(player)
+          log.info(" #{times}: #{player.name}")
+          times += 1
+          result = roll(player.dice_to_roll)
+          log.info(" Our rolls: #{result.inspect}")
+          our_roll = result.max
+          other_players.each do | other |
+            next if spot.forces_for(other) <= 0
+            log.info(" Versus: #{other.name}")
+            their_roll = roll(other.dice_to_roll).max
+            log.info(" Their best roll: #{their_roll}")
+            if our_roll > their_roll
+              spot.attrit(other, 1)
+            elsif their_roll > our_roll
+              spot.attrit(player, 1)
+            end
+          end
+        end
+      end
+    end
+    test_for_elimination
   end
   
-  def to_s
-    return msg
-  end
-  
-end
-
-class String
-  def as_message
-    return Message.new(self)
-  end
 end
 
 class TurnController
@@ -52,15 +66,11 @@ class TurnController
   end
   
   def beginTurn
-    @rolled = 0
-    if @player.spawn_roll > 0
-      if @player.spawn_roll == 1
-        @rolled = 1
-      else
-        @rolled = rand(@player.spawn_roll) +1
-      end
-    end
-    @player.number_to_spawn = @rolled
+    log = Engine.instance.logger
+    @rolled = roll(1, @player.spawn_roll)
+    log.info("#{@player.name} rolled to spawn #{@rolled.inspect}")  
+    @player.number_to_spawn = @rolled[0]
+    log.debug("  Number to spawn is: #{@player.number_to_spawn}")
   end
   
   def click(loc)
@@ -74,6 +84,7 @@ class TurnController
   end
   
   def turn_complete?
+    #Engine.instance.logger.debug("Spawns left: #{@player.number_to_spawn}")
     return @player.number_to_spawn <= 0
   end
   

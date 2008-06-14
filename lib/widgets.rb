@@ -1,4 +1,4 @@
-require 'engine'
+
 
 class Widget
   attr_accessor :rect
@@ -35,6 +35,75 @@ class Label < Widget
     @image = @font.render(text, true, @color)
     @rect.w = @image.w
     @rect.h = @image.h
+  end
+  
+end
+
+class Message
+  
+  include Comparable
+  
+  attr_accessor :time
+  attr_accessor :msg
+  
+  def initialize(message, display_for=2.0)
+    @msg = message
+    @time = display_for
+  end
+  
+  def <=>(other)
+    return self.time <=> other.time
+  end
+  
+  def as_message
+    return self
+  end
+  
+  def to_s
+    return msg
+  end
+  
+end
+
+class String
+  def as_message
+    return Message.new(self)
+  end
+end
+
+class MessageQueueView < Widget
+  
+  def initialize(offset, width, queue)
+    super()
+    @offset = offset
+    @rect.x = offset[0]
+    @rect.y = offset[1]
+    @rect.w = width
+    @labels = []
+    @queue = queue
+    setup_labels
+  end
+  
+  def draw(screen)
+    screen.fill($MQV_COLOR ,@rect)
+    @labels.each { |l| l.draw(screen) }
+  end
+  
+  def setup_labels
+    @labels = []
+    h = 0
+    @queue.each do | message |
+      label = Label.new(message.to_s)
+      label.rect.x = @rect.x
+      label.rect.y = @rect.y + (@labels.size * label.rect.h)
+      @labels << label
+      h += label.rect.h
+    end
+    @rect.h = h
+  end
+  
+  def update(delay)
+    setup_labels
   end
   
 end

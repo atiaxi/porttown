@@ -4,19 +4,24 @@ hotspots:
   base: 0
   connected_to: 
   - &id009 !ruby/object:Hotspot 
+    base: 
     connected_to: 
     - *id001
     - &id002 !ruby/object:Hotspot 
+      base: 
       connected_to: 
       - *id009
       - *id001
       - &id008 !ruby/object:Hotspot 
+        base: 
         connected_to: 
         - *id002
         - &id003 !ruby/object:Hotspot 
+          base: 
           connected_to: 
           - *id008
           - &id010 !ruby/object:Hotspot 
+            base: 1
             connected_to: 
             - *id003
             forces: 
@@ -25,17 +30,21 @@ hotspots:
             name: Graveyard
             spawnpoint: 
             x: 100
-            y: 50
+            y: 70
           - &id005 !ruby/object:Hotspot 
+            base: 
             connected_to: 
             - *id002
             - *id003
             - &id006 !ruby/object:Hotspot 
+              base: 
               connected_to: 
               - &id004 !ruby/object:Hotspot 
+                base: 
                 connected_to: 
                 - *id006
                 - &id007 !ruby/object:Hotspot 
+                  base: 
                   connected_to: 
                   - *id004
                   - *id005
@@ -125,18 +134,21 @@ hotspots:
 players: 
 - !ruby/object:Player 
   controller: :person
+  dice_to_roll: 2
   name: Pirates
   number_to_spawn: 0
   side: 0
   spawn_roll: 3
 - !ruby/object:Player 
   controller: :person
+  dice_to_roll: 1
   name: Zombies
   number_to_spawn: 0
   side: 1
   spawn_roll: 6
 - !ruby/object:Player 
   controller: :neutral
+  dice_to_roll: 0
   name: Civilians
   number_to_spawn: 0
   side: 2

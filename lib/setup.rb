@@ -16,6 +16,7 @@ end
 
 require 'engine'
 require 'placement'
+require 'fight'
 
 def start_porttown
   Rubygame.init
@@ -32,6 +33,7 @@ def start_porttown
   end
   
   engine.add_phases(placement_phases)
+  engine.add_phase(FightPhase.new(map))
   engine.run
 end
 

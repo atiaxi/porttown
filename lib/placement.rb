@@ -2,42 +2,6 @@ require 'globals'
 require 'widgets'
 require 'controller'
 
-class MessageQueueView < Widget
-  
-  def initialize(offset, width, queue)
-    super()
-    @offset = offset
-    @rect.x = offset[0]
-    @rect.y = offset[1]
-    @rect.w = width
-    @labels = []
-    @queue = queue
-    setup_labels
-  end
-  
-  def draw(screen)
-    screen.fill($MQV_COLOR ,@rect)
-    @labels.each { |l| l.draw(screen) }
-  end
-  
-  def setup_labels
-    @labels = []
-    h = 0
-    @queue.each do | message |
-      label = Label.new(message.to_s)
-      label.rect.x = @rect.x
-      label.rect.y = @rect.y + (@labels.size * label.rect.h)
-      @labels << label
-      h += label.rect.h
-    end
-    @rect.h = h
-  end
-  
-  def update(delay)
-    setup_labels
-  end
-  
-end
 
 class HotspotView < Widget
   
@@ -159,16 +123,14 @@ class PlacementPhase < Phase
   end
   
   def activate
-    @mqv.setup_labels
     @engine.messages << "#{@player.name} turn begins"
-    @spawnLabel.text = "Calculating..."
     @controller.beginTurn
-    update_spawnLabel
+    update_graphics
   end
   
   def click(loc)
     @controller.click([loc[0]-@mapView.rect.x, loc[1]-@mapView.rect.y])
-    update_spawnLabel
+    update_graphics
   end
   
   def draw(screen)
@@ -177,11 +139,15 @@ class PlacementPhase < Phase
   end
   
   def update(delay)
+    @controller.update(delay)
+    update_graphics(delay)
+    @engine.done if @controller.turn_complete?
+  end
+  
+  def update_graphics(delay= 0.001)
     @mapView.update(delay)
     @mqv.update(delay)
-    @controller.update(delay)
     update_spawnLabel
-    @engine.done if @controller.turn_complete?
   end
   
   def update_spawnLabel
