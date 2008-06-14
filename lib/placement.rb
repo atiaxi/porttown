@@ -2,6 +2,43 @@ require 'globals'
 require 'widgets'
 require 'controller'
 
+class MessageQueueView < Widget
+  
+  def initialize(offset, width)
+    super()
+    @offset = offset
+    @rect.x = offset[0]
+    @rect.y = offset[1]
+    @rect.w = width
+    @labels = []
+    setup_labels
+  end
+  
+  def draw(screen)
+    screen.fill($MQV_COLOR ,@rect)
+    @labels.each { |l| l.draw(screen) }
+  end
+  
+  def setup_labels
+    @labels = []
+    h = 0
+    messages = Engine.instance.messages
+    messages.each do | message |
+      label = Label.new(message.to_s)
+      label.rect.x = @rect.x
+      label.rect.y = @rect.y + (@labels.size * label.rect.h)
+      @labels << label
+      h += label.rect.h
+    end
+    @rect.h = h
+  end
+  
+  def update(delay)
+    setup_labels
+  end
+  
+end
+
 class HotspotView < Widget
   
   def initialize(hotspot, offset, players)
@@ -116,9 +153,14 @@ class PlacementPhase < Phase
     @spawnLabel.rect.top = @turnLabel.rect.bottom + 3
     @spawnLabel.rect.centerx = @turnLabel.rect.centerx
     @widgets << @spawnLabel
+
+    @mqv = MessageQueueView.new([1,1], @engine.screen.w - 2)
+    @widgets << @mqv
   end
   
   def activate
+    @mqv.setup_labels
+    @engine.messages << "#{@player.name} turn begins"
     @spawnLabel.text = "Calculating..."
     @controller.beginTurn
     update_spawnLabel
@@ -136,6 +178,7 @@ class PlacementPhase < Phase
   
   def update(delay)
     @mapView.update(delay)
+    @mqv.update(delay)
     @controller.update(delay)
     update_spawnLabel
     @engine.done if @controller.turn_complete?

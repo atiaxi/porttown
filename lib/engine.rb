@@ -4,6 +4,33 @@ require 'logger'
 require 'yaml'
 require 'singleton'
 
+class MessageQueue
+  
+  def initialize
+    @queue = []
+  end
+  
+  def <<(msg)
+    add_message(msg)
+  end
+  
+  def add_message(msg)
+    @queue << msg.as_message
+  end
+  
+  def each(&proc)
+    return @queue.each(&proc)
+  end
+  
+  def update(delay)
+    @queue.dup.each do | m |
+      m.time -= delay
+      @queue.delete(m) if m.time <= 0
+    end
+  end
+  
+end
+
 class Phase
   
   def initialize()
@@ -40,6 +67,7 @@ class Engine
   attr_reader :screen
   attr_reader :dirs
   attr_reader :logger
+  attr_reader :messages
   
   def initialize()
     flags = Rubygame::DOUBLEBUF | Rubygame::HWSURFACE
@@ -50,6 +78,7 @@ class Engine
     @current_phase_index = 0
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
+    @messages = MessageQueue.new
   end
   
   def add_phase(phase)
@@ -124,11 +153,16 @@ class Engine
       phase.draw(@screen)
       @screen.flip
       elapsed = clock.tick
-      phase.update(elapsed / 1000.0)
+      self.update(phase,elapsed/1000.0)
       
       Rubygame::Clock.wait(200)
     end
     Rubygame::quit
+  end
+  
+  def update(phase,delay)
+    @messages.update(delay)
+    phase.update(delay)
   end
   
   def yaml_for(filename)

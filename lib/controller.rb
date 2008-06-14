@@ -1,4 +1,36 @@
 
+class Message
+  
+  include Comparable
+  
+  attr_accessor :time
+  attr_accessor :msg
+  
+  def initialize(message, display_for=2.0)
+    @msg = message
+    @time = display_for
+  end
+  
+  def <=>(other)
+    return self.time <=> other.time
+  end
+  
+  def as_message
+    return self
+  end
+  
+  def to_s
+    return msg
+  end
+  
+end
+
+class String
+  def as_message
+    return Message.new(self)
+  end
+end
+
 class TurnController
   
   attr_reader :rolled
@@ -15,7 +47,6 @@ class TurnController
   end
   
   def initialize(player, map)
-    Engine.instance.logger.debug("Map is #{map}")
     @player = player
     @map = map
   end
@@ -29,12 +60,17 @@ class TurnController
         @rolled = rand(@player.spawn_roll) +1
       end
     end
-    Engine.instance.logger.debug("Rolled: #{@rolled}")
     @player.number_to_spawn = @rolled
   end
   
   def click(loc)
     
+  end
+  
+  def spawn_at(chosen)
+    chosen.reinforce(@player, 1)
+    @player.number_to_spawn -= 1
+    Engine.instance.messages << "#{@player.name} spawned at #{chosen.name}"
   end
   
   def turn_complete?
@@ -64,13 +100,13 @@ class HumanController < TurnController
     
     chosen = @map.hotspots[dists.index(min_dist)]
 
-    spawn_at(chosen)
-
-  end
-
-  def spawn_at(chosen)
-    chosen.reinforce(@player, 1)
-    @player.number_to_spawn -= 1
+    if chosen.can_spawn_here?(@player)
+      spawn_at(chosen)
+    else
+      spawnmsg = "You can only spawn in places you control or "+
+        "places next to them"
+      Engine.instance.messages << spawnmsg
+    end
   end
   
 end

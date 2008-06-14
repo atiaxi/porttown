@@ -55,6 +55,7 @@ def main
   graveyard = Hotspot.new("Graveyard")
   graveyard.connect_to(church)
   graveyard.loc = [100, 50 ]
+  graveyard.reinforce(zombies, 6)
   map.add_hotspot(graveyard)
   
   mayor = Hotspot.new("Mayor's Villa")

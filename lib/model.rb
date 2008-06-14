@@ -26,6 +26,13 @@ class Hotspot
     return @base == player.side
   end
   
+  def can_spawn_here?(player)
+    return true if forces_for(player) > 0
+    return @connected_to.detect do | spot |
+      spot.forces_for(player) > 0
+    end
+  end
+  
   def connect_to(hotspot)
     @connected_to << hotspot unless @connected_to.include?(hotspot)
     hotspot.connect_to(self) unless hotspot.connected_to.include?(self)
