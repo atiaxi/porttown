@@ -10,8 +10,10 @@ def main
   
   pirates = Player.new(0, 'Pirates')
   pirates.controller = :person
+  pirates.spawn_roll = 3
   zombies = Player.new(1, 'Zombies')
   zombies.controller = :person
+  zombies.spawn_roll = 6
   neutral = Player.new(2, 'Civilians')
   neutral.controller = :neutral
   

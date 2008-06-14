@@ -32,7 +32,9 @@ class Hotspot
   end
   
   def forces_for(player)
-    return @forces.fetch(player.side, 0)
+    val = @forces[player.side]
+    val = 0 unless val
+    return val
   end
   
   def loc=(anArray)
@@ -73,6 +75,8 @@ end
 class Player
   
   attr_accessor :side, :name
+  attr_accessor :spawn_roll
+  attr_accessor :number_to_spawn
   
   # One of :person, :cpu, or :neutral - neutral is like CPU except they don't
   # get a placement phase and don't do anything.
@@ -82,6 +86,8 @@ class Player
     @side = side_number
     @name = fancy_name
     @controller = control
+    @spawn_roll = 0
+    @number_to_spawn = 0
   end
   
 end

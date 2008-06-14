@@ -8,6 +8,11 @@ class Phase
   
   def initialize()
     @engine = Engine.instance
+    @widgets = []
+  end
+  
+  def activate
+    
   end
   
   def click(loc)
@@ -15,7 +20,7 @@ class Phase
   end
   
   def draw(screen)
-    
+    @widgets.each { |w| w.draw(screen) }
   end
   
   def update(delay)
@@ -65,6 +70,7 @@ class Engine
   def done
     return nil if @phases.empty?
     @current_phase_index = (@current_phase_index + 1) % @phases.size
+    current_phase.activate if current_phase
   end
   
   def font_for(filename, size=16)
@@ -101,8 +107,9 @@ class Engine
     queue = Rubygame::EventQueue.new
     
     clock.tick
-    phase = current_phase
-    while @running && phase
+    current_phase.activate if current_phase
+    while @running && current_phase
+      phase = current_phase
       queue.each do | event |
         case(event)
         when Rubygame::QuitEvent
@@ -117,7 +124,7 @@ class Engine
       phase.draw(@screen)
       @screen.flip
       elapsed = clock.tick
-      # TODO: Updates
+      phase.update(elapsed / 1000.0)
       
       Rubygame::Clock.wait(200)
     end

@@ -125,12 +125,18 @@ players:
 - !ruby/object:Player 
   controller: :person
   name: Pirates
+  number_to_spawn: 0
   side: 0
+  spawn_roll: 3
 - !ruby/object:Player 
   controller: :person
   name: Zombies
+  number_to_spawn: 0
   side: 1
+  spawn_roll: 6
 - !ruby/object:Player 
   controller: :neutral
   name: Civilians
+  number_to_spawn: 0
   side: 2
+  spawn_roll: 0
