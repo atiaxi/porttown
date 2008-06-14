@@ -18,6 +18,10 @@ class MessageQueue
     @queue << msg.as_message
   end
   
+  def clear
+    @queue.clear
+  end
+  
   def each(&proc)
     return @queue.each(&proc)
   end
@@ -81,6 +85,10 @@ class Engine
     @messages = MessageQueue.new
   end
   
+  def add_autoload(dir)
+    Engine.autoload_dirs << dir unless Engine.autoload_dirs.include?(dir)
+  end
+  
   def add_phase(phase)
     @phases << phase
   end
@@ -128,6 +136,18 @@ class Engine
       end
     end
     return @images[filename]
+  end
+  
+  def is_gem?(name)
+    return @is_gem if @is_gem
+    begin
+      require 'rubygems'
+      Gem.activate(name, false)
+      @is_gem = true
+    rescue LoadError
+      @is_gem = false
+    end
+    return @is_gem
   end
   
   def run

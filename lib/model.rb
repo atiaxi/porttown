@@ -73,9 +73,12 @@ class Map
   attr_reader :players
   attr_reader :hotspots
   
+  attr_accessor :background
+  
   def initialize
     @hotspots = []
     @players = []
+    @background = nil
   end
   
   def active_players
@@ -120,6 +123,11 @@ class Map
     return @players.reject do |p|
       p == player || p.controller == :neutral
     end
+  end
+  
+  # This only works if the array hasn't changed
+  def player_on_side(side)
+    return @players[side]
   end
   
   # If there is only one active player left, returns that.  Otherwise, nil.

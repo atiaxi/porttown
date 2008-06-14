@@ -1,8 +1,20 @@
 
 class FightController
   
-  def initialize(map)
+  def initialize(map, queue=nil)
     @map = map
+    @queue = queue
+  end
+  
+  def compile_report_for(spot, original_forces)
+    original_forces.each_index do |i|
+      player = @map.player_on_side(i)
+      original = original_forces[player.side] || 0
+      diff = original - spot.forces_for(player)
+      if diff > 0
+        report("#{player.name} lost #{diff} at #{spot.name}")
+      end
+    end
   end
   
   def test_for_elimination
@@ -16,21 +28,16 @@ class FightController
     
     @map.hotspots.each do | spot |
       original_forces = spot.forces.dup
-      log.info("Fighting begins in #{spot.name}")
       @map.active_players.each do | player |
         other_players = @map.other_players(player)
         times = 0
         while times < spot.forces_for(player)
-          log.info(" #{times}: #{player.name}")
           times += 1
           result = roll(player.dice_to_roll)
-          log.info(" Our rolls: #{result.inspect}")
           our_roll = result.max
           other_players.each do | other |
             next if spot.forces_for(other) <= 0
-            log.info(" Versus: #{other.name}")
             their_roll = roll(other.dice_to_roll).max
-            log.info(" Their best roll: #{their_roll}")
             if our_roll > their_roll
               spot.attrit(other, 1)
             elsif their_roll > our_roll
@@ -39,8 +46,14 @@ class FightController
           end
         end
       end
+      compile_report_for(spot, original_forces)
     end
     test_for_elimination
+  end
+  
+  def report(string)
+    @queue << string if @queue
+    Engine.instance.logger.info(string)
   end
   
 end
@@ -66,11 +79,11 @@ class TurnController
   end
   
   def beginTurn
-    log = Engine.instance.logger
+    #log = Engine.instance.logger
     @rolled = roll(1, @player.spawn_roll)
-    log.info("#{@player.name} rolled to spawn #{@rolled.inspect}")  
+    #log.info("#{@player.name} rolled to spawn #{@rolled.inspect}")  
     @player.number_to_spawn = @rolled[0]
-    log.debug("  Number to spawn is: #{@player.number_to_spawn}")
+    #log.debug("  Number to spawn is: #{@player.number_to_spawn}")
   end
   
   def click(loc)

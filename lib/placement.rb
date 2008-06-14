@@ -15,11 +15,11 @@ class HotspotView < Widget
   end
   
   def draw(screen)
-    @spot.connected_to.each do | other |
-      otherx = other.x + @offset[0]
-      othery = other.y + @offset[1]
-      screen.draw_line(@rect.midbottom, [otherx,othery], $HOTSPOT_LINE_COLOR)
-    end
+#    @spot.connected_to.each do | other |
+#      otherx = other.x + @offset[0]
+#      othery = other.y + @offset[1]
+#      screen.draw_line(@rect.midbottom, [otherx,othery], $HOTSPOT_LINE_COLOR)
+#    end
     
     @name_label.draw(screen)
     @player_labels.each { |l| l.draw(screen) }
@@ -86,10 +86,18 @@ class MapView < Widget
     @spots = map.hotspots.collect do | spot |
       HotspotView.new(spot, @rect.topleft, @map.players)
     end
+    if map.background
+      @background = Engine.instance.image_for(map.background)
+    else
+      @background = nil
+    end
   end
   
   def draw(screen)
     screen.fill(Rubygame::Color[:green], @rect)
+    if @background
+      @background.blit(screen, @rect.topleft)
+    end
     @spots.each do | spot |
       spot.draw(screen)
     end

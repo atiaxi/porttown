@@ -1,12 +1,15 @@
 
+
+$GEM_NAME = 'porttown'
+$PORTTOWN_VERSION = [0,1,0]
+
 $HOTSPOT_FONT = "LiberationSans-Regular.ttf"
-$HOTSPOT_COLOR = Rubygame::Color[:black]
-$HOTSPOT_LINE_COLOR = Rubygame::Color[:gray]
+$HOTSPOT_COLOR = [0, 0, 0, 0]
 
 $DEFAULT_LABEL_FONT = "LiberationSans-Regular.ttf"
-$DEFAULT_LABEL_COLOR = Rubygame::Color[:white]
+$DEFAULT_LABEL_COLOR = [255,255,255,0]
 
-$MQV_COLOR = Rubygame::Color[:blue]
+$MQV_COLOR = [0,0,255,0]
 
 # Rolls the given number of d(sides) dice.
 # Returns an array of the rolls

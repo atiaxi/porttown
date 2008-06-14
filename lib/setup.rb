@@ -17,6 +17,7 @@ end
 require 'engine'
 require 'placement'
 require 'fight'
+require 'globals'
 
 def start_porttown
   Rubygame.init
@@ -24,6 +25,13 @@ def start_porttown
   
   engine = Engine.instance
   engine.screen.title = "Port Town"
+  
+  if engine.is_gem?($GEM_NAME)
+    gem_root = Gem.loaded_specs[$GEM_NAME].full_gem_path
+    engine.add_autoload(File.join(gem_root, "data"))
+    engine.add_autoload(File.join(gem_root, "images"))
+  end
+  
   # TODO: Command line parsing and such.  For now, we do whatever the default
   # map says
   map = engine.yaml_for("pirates.yml")

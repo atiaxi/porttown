@@ -1,4 +1,5 @@
 --- !ruby/object:Map 
+background: port_town.png
 hotspots: 
 - &id001 !ruby/object:Hotspot 
   base: 0
@@ -29,7 +30,7 @@ hotspots:
             - 6
             name: Graveyard
             spawnpoint: 
-            x: 100
+            x: 175
             y: 70
           - &id005 !ruby/object:Hotspot 
             base: 
@@ -54,7 +55,7 @@ hotspots:
                   - 10
                   name: Marketplace
                   spawnpoint: 
-                  x: 700
+                  x: 610
                   y: 175
                 forces: 
                 - 
@@ -62,7 +63,7 @@ hotspots:
                 - 3
                 name: Nobles' Residences
                 spawnpoint: 
-                x: 610
+                x: 710
                 y: 75
               - *id005
               forces: 
@@ -71,33 +72,33 @@ hotspots:
               - 1
               name: Mayor's Villa
               spawnpoint: 
-              x: 390
+              x: 475
               y: 75
             - *id007
             forces: 
             - 
             - 
             - 6
-            name: Main Street
+            name: Fountain
             spawnpoint: 
-            x: 400
-            y: 200
+            x: 475
+            y: 180
           forces: 
           - 
           - 
           - 6
           name: Church
           spawnpoint: 
-          x: 100
-          y: 200
+          x: 175
+          y: 180
         forces: 
         - 
         - 
         - 4
         name: Town Watch
         spawnpoint: 
-        x: 100
-        y: 295
+        x: 175
+        y: 310
       - *id005
       forces: 
       - 
@@ -105,22 +106,22 @@ hotspots:
       - 4
       name: Slums
       spawnpoint: 
-      x: 500
-      y: 300
+      x: 575
+      y: 275
     forces: 
     - 
     - 
     - 3
     name: Tavern
     spawnpoint: 
-    x: 600
-    y: 300
+    x: 725
+    y: 380
   - *id002
   forces: 
   - 6
   name: Pirate Ship
   spawnpoint: 
-  x: 400
+  x: 475
   y: 380
 - *id009
 - *id002
