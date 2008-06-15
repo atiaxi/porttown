@@ -11,6 +11,13 @@ class HotspotView < Widget
     @offset = offset
     @spot = hotspot
     @players = players
+    @color = $HOTSPOT_COLOR
+    setup_hotspot_labels
+  end
+  
+  def color=(new_color)
+    return if new_color == @color
+    @color = new_color
     setup_hotspot_labels
   end
   
@@ -36,15 +43,19 @@ class HotspotView < Widget
     return @image
   end
   
+  def model
+    return @spot
+  end
+  
   def setup_hotspot_labels
-    @name_label = Label.new(@spot.name, $HOTSPOT_FONT, 16, $HOTSPOT_COLOR)
+    @name_label = Label.new(@spot.name, $HOTSPOT_FONT, 16, @color)
     @rect.w = @name_label.rect.w
     @rect.centerx = @offset[0] + @spot.x
     
     @players_to_labels = {}
     h = @name_label.rect.h
     @player_labels = @players.collect do |player|
-      l = Label.new("foo", $HOTSPOT_FONT, 12, $HOTSPOT_COLOR)
+      l = Label.new("foo", $HOTSPOT_FONT, 12, @color)
       h += l.rect.h
       @players_to_labels[player] = l
       l
@@ -78,6 +89,8 @@ class HotspotView < Widget
 end
 
 class MapView < Widget
+  
+  attr_reader :spots
   
   def initialize(map,aspect = Rubygame::Rect.new(0, 100, 800, 400))
     super()
@@ -139,13 +152,51 @@ class PlacementPhase < Phase
   end
   
   def click(loc)
-    @controller.click([loc[0]-@mapView.rect.x, loc[1]-@mapView.rect.y])
+    @controller.click(loc)
+    return unless @player.controller == :person
+    
+    if @player.can_spawn?
+      clicked = nearest_hotspot_to(loc)
+      model = clicked.model
+      if model.can_spawn_here?(@player)
+        @controller.spawn_at(model)
+      else
+        spawnmsg = "You can only spawn in places you control or "+
+          "places next to them"
+        Engine.instance.messages << spawnmsg
+      end
+    end
+    
     update_graphics
   end
   
   def draw(screen)
     @mapView.draw(screen)
     super
+  end
+  
+  def hover(loc)
+    return unless @player.controller == :person
+    hot = nearest_hotspot_to(loc)
+    @mapView.spots.each do | spot |
+      if spot == hot
+        spot.color = $HOTSPOT_HIGHLIGHT
+      else
+        spot.color = $HOTSPOT_COLOR
+      end
+    end
+  end
+  
+  def nearest_hotspot_to(loc)
+    dists = @mapView.spots.collect do | spot |
+      dx = loc[0] - spot.rect.centerx
+      dy = loc[1] - spot.rect.centery
+      Math.sqrt(dx**2 + dy**2)
+    end
+    min_dist = dists.min
+    chosen = @mapView.spots[dists.index(min_dist)]
+    
+    return chosen
   end
   
   def update(delay)

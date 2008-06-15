@@ -5,12 +5,14 @@ $PORTTOWN_VERSION = [0,2,0]
 
 $HOTSPOT_FONT = "LiberationSans-Regular.ttf"
 $HOTSPOT_COLOR = [0, 0, 0, 0]
+$HOTSPOT_HIGHLIGHT = [255, 255, 255, 0]
 
 $DEFAULT_LABEL_FONT = "LiberationSans-Regular.ttf"
 $DEFAULT_LABEL_COLOR = [255,255,255,0]
 
 $MQV_COLOR = [0,0,255,0]
 
+# Set by command line options
 $text_speed = 3.0
 $ai_speed = 2.5
 $verbose = false

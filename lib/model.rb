@@ -187,6 +187,10 @@ class Player
     return @side == other.side
   end
   
+  def can_spawn?
+    return @number_to_spawn > 0
+  end
+  
   # Does a fight against the given other player, returns the victor
   # or nil on a tie
   def fight(other)

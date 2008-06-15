@@ -39,6 +39,10 @@ class Phase
     @widgets.each { |w| w.draw(screen) }
   end
   
+  def hover(loc)
+    
+  end
+  
   def update(delay)
     
   end
@@ -150,6 +154,8 @@ class Engine
         # TODO: More event handling
         when Rubygame::MouseUpEvent
           phase.click(event.pos)
+        when Rubygame::MouseMotionEvent
+          phase.hover(event.pos)
         end
       end
       

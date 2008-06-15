@@ -19,6 +19,8 @@ end
 
 class Label < Widget
   
+  attr_reader :color
+  
   def initialize(text, font=$DEFAULT_LABEL_FONT, size=16, color=$DEFAULT_LABEL_COLOR)
     super()
     @font = Engine.instance.font_for(font,size)

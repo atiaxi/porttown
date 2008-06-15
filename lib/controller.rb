@@ -158,45 +158,16 @@ end
 
 class AIController < TurnController
   
-end
-
-class HumanController < TurnController
-  
-  def click(loc)
-    return if turn_complete?
-    dists = @map.hotspots.collect do | spot |
-      dx = loc[0] - spot.x
-      dy = loc[1] - spot.y
-      Math.sqrt(dx**2 + dy**2)
-    end
-    min_dist = dists.min
-    
-    chosen = @map.hotspots[dists.index(min_dist)]
-
-    if chosen.can_spawn_here?(@player)
-      spawn_at(chosen)
-    else
-      spawnmsg = "You can only spawn in places you control or "+
-        "places next to them"
-      Engine.instance.messages << spawnmsg
-    end
-  end
-  
-end
-
-class RandomAIController < AIController
-  
   def initialize(player, map, speed = nil)
     super(player,map)
     @speed = speed || $ai_speed
     @counted = 0.0
   end
   
-  def spawn
-    valid = @map.hotspots.select do | spot |
-      spot.can_spawn_here?(@player)
-    end
-    spawn_at(valid.random)
+  # If we get a click, that's the person sitting at the
+  # computer telling us to hurry up!
+  def click(loc)
+    @counted = @speed + 0.001  
   end
   
   def update(delay)
@@ -205,6 +176,25 @@ class RandomAIController < AIController
       @counted -= @speed
       spawn
     end
+  end
+  
+end
+
+class HumanController < TurnController
+  
+  def click(loc)
+    return if turn_complete?
+  end
+  
+end
+
+class RandomAIController < AIController
+  
+  def spawn
+    valid = @map.hotspots.select do | spot |
+      spot.can_spawn_here?(@player)
+    end
+    spawn_at(valid.random)
   end
   
 end

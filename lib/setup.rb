@@ -1,19 +1,5 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'rubygems'
-  gem 'rubygame', '>=2.3.0'
-rescue LoadError
-  # Either no gems or no rubygame
-end
-
-begin
-  require 'rubygame'
-rescue LoadError
-  puts "This game requires Rubygame 2.3.0 or better"
-  exit
-end
-
 require 'engine'
 require 'placement'
 require 'fight'
