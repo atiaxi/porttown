@@ -1,0 +1,89 @@
+Port Town
+  A RubygameWeekend challenge
+  by Roger Ostrander ( atiaxi at gmail.com )
+  Proper credit in THANKS
+  License info in COPYING
+--------------------------------------------------------------------------------
+ABOUT
+
+  Yer favorite tradin' port an' plunderin' spot's been overrun by the undead!
+  Best send them back to Davy Jones' locker, so ye can get back to lootin'!  
+
+REQUIREMENTS
+	
+  Rubgygame version 2.3.0 or better (http://rubygame.sourceforge.net/)
+  	
+HOW TO INSTALL
+
+  If you downloaded this as a gem, just do (as root):
+  
+    gem install porttown-<version>.gem
+  
+  If you downloaded the .tar.gz or got this from github, no installation is 
+  necessary.
+  
+HOW TO RUN
+
+  If you installed the gem, you should just be able to type 'porttown' at the
+  command prompt.  Keep in mind some distros don't automatically put the gems
+  binary directory in the path; on my system it's /var/lib/gems/1.8/bin
+  
+  If you're running this from source:
+  
+    cd porttown-<version>
+    ./bin/porttown
+    
+HOW TO PLAY
+
+  This section explains how to play the default map ("pirates").
+  
+  You are the pirates, fighting to take the town back from zombies.  Each turn,
+  you will be able to place between 1 and 3 new pirates.  Valid spots include 
+  anywhere you already have pirates, or anywhere next to that.  Keep in mind
+  you can only have 10 pirates at any one location.
+  
+  When you have placed all your pirates, the zombies (played by the computer)
+  will get between 1 and 6 new zombies, and place them randomly.
+  
+  At the end of the turn, if there are pirates and zombies in the same location,
+  they will fight.  Each pirate will roll 2 dice against each zombie, and that
+  zombie rolls one die.  If either of the pirate's rolls beat the zombie's,
+  the pirates win.  If the zombie rolls better, the zombie kills the pirate,
+  who himself rises as another zombie.  Pirates can also critically hit if they
+  roll 2 ones, and automatically win.  Once the pirates have fought the zombies,
+  the zombies fight back similarly.
+  
+  For every 4 civilians in a pirate-occupied square, you can loot enough swag
+  to pay for another pirate, who will appear in that location.  Zombies also
+  have a chance to turn civilians undead.
+  
+  You win if, at the end of the turn, there are more pirates in the Graveyard
+  than zombies, and you lose if there are more zombies at the Pirate Ship than
+  pirates.
+  
+  Good luck!
+  
+MULTIPLAYER
+
+  Port Town supports hotseat multiplayer.  To have someone else play the
+  zombies, use the --human option:
+  
+    porttown --human 2
+    
+  This indicates that player 2 is to be human.  Similarly, to play as zombies
+  against computer controlled pirates:
+  
+    porttown --human 2 --cpu 1
+    
+SPEED
+
+  By default, messages will last on screen for 3 seconds, and the AI will wait
+  2.5 seconds before making a move, so you can see the results.  To speed this
+  up you can click the messages to force the AI to move, or use the 
+  --text-speed and --ai-speed options:
+  
+    porttown --text-speed 5000 --ai-speed 1000
+    
+  That setting would make the text persist for 5 seconds, but the AI would only
+  take one second to move.
+  
