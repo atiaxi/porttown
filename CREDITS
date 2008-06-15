@@ -1,8 +1,16 @@
 
 Programming and Art (such as it is) by Roger Ostrander (atiaxi@gmail.com)
 
+All code licensed under the GPLv3, see COPYING for details.
+All original art (port_town.png, port_down.svg) licensed under the Creative
+  Commons Attribution-Share Alike 3.0 United States License. To view a copy of
+  this license, visit http://creativecommons.org/licenses/by-sa/3.0/us/; or
+  send a letter to Creative Commons, 171 2nd Street, Suite 300, 
+  San Francisco, California, 94105, USA.
+
 Red Hat "Liberation Fonts" (GPL): https://www.redhat.com/promo/fonts/
 	LiberationSans-Regular.ttf 
 
 Thanks to:
   #rubygame
+  Anyone who tested this
