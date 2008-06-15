@@ -16,6 +16,9 @@
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << 'lib'
+
+$: << '../lib' # In case people are running in this dir
+
 require 'setup'
 
 # Because this is wrapped by Gems, the usual standby of:
