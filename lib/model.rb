@@ -30,6 +30,7 @@ class Hotspot
   end
   
   def can_spawn_here?(player)
+    return true if base_of?(player)
     return true if forces_for(player) > 0
     return @connected_to.detect do | spot |
       spot.forces_for(player) > 0
@@ -91,6 +92,11 @@ class Map
   
   def add_player(player)
     @players[player.side] = player
+  end
+  
+  # The map is automated if every active player is a CPU player
+  def automated
+    return !active_players.detect { |player| player.controller != :cpu }
   end
   
   # This player is finished, mark them eliminated.

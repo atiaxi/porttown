@@ -11,6 +11,17 @@ $DEFAULT_LABEL_COLOR = [255,255,255,0]
 
 $MQV_COLOR = [0,0,255,0]
 
+class Array
+  def random
+    if size > 0
+      return self[rand(size)]
+    else
+      return nil
+    end
+  end
+
+end
+
 # Rolls the given number of d(sides) dice.
 # Returns an array of the rolls
 def roll(number=1, sides=6)

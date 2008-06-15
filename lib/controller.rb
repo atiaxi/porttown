@@ -53,7 +53,7 @@ class FightController
   
   def report(string)
     @queue << string if @queue
-    Engine.instance.logger.info(string)
+    #Engine.instance.logger.info(string)
   end
   
 end
@@ -67,7 +67,7 @@ class TurnController
     when :person
       return HumanController.new(player,map)
     when :cpu
-      return AIController.new(player,map)
+      return RandomAIController.new(player,map)
     when :neutral
       return self.new(player,map)
     end
@@ -130,6 +130,31 @@ class HumanController < TurnController
       spawnmsg = "You can only spawn in places you control or "+
         "places next to them"
       Engine.instance.messages << spawnmsg
+    end
+  end
+  
+end
+
+class RandomAIController < AIController
+  
+  def initialize(player, map, speed = 1.0)
+    super(player,map)
+    @speed = speed
+    @counted = 0.0
+  end
+  
+  def spawn
+    valid = @map.hotspots.select do | spot |
+      spot.can_spawn_here?(@player)
+    end
+    spawn_at(valid.random)
+  end
+  
+  def update(delay)
+    @counted += delay
+    if @counted > @speed
+      @counted -= @speed
+      spawn
     end
   end
   

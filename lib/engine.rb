@@ -169,11 +169,12 @@ class Engine
         end
       end
       
+      elapsed = clock.tick
+      self.update(phase,elapsed/1000.0)
+      
       @screen.fill(Rubygame::Color[:black])
       phase.draw(@screen)
       @screen.flip
-      elapsed = clock.tick
-      self.update(phase,elapsed/1000.0)
       
       Rubygame::Clock.wait(200)
     end

@@ -141,7 +141,7 @@ players:
   side: 0
   spawn_roll: 3
 - !ruby/object:Player 
-  controller: :person
+  controller: :cpu
   dice_to_roll: 1
   name: Zombies
   number_to_spawn: 0

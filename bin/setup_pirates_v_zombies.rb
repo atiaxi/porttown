@@ -14,7 +14,7 @@ def piratesVzombies
   pirates.spawn_roll = 3
   pirates.dice_to_roll = 2
   zombies = Player.new(1, 'Zombies')
-  zombies.controller = :person
+  zombies.controller = :cpu
   zombies.spawn_roll = 6
   zombies.dice_to_roll = 1
   neutral = Player.new(2, 'Civilians')
