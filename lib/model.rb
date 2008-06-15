@@ -183,9 +183,15 @@ class Player
   # The default, nil, means no limit.
   attr_accessor :spawn_limit
   
-  # If non-nil, this player is weak to the given die roll.  In a fight, if the
-  # opposing player has this number as their best roll, we automatically lose
+  # If non-nil, this player is weak to the given die roll.  If we are attacked
+  # and the opposing player rolls this number as their highest, we lose.
   attr_accessor :weakness
+  
+  # Crits are implemented as follows:  If the player has, out of their entire
+  # roll, crit_dice worth of dice showing crit_number, they win
+  # A nil crit_dice means no critical.
+  attr_accessor :crit_dice
+  attr_accessor :crit_number
   
   def initialize(side_number, fancy_name, control=:person)
     @side = side_number
@@ -199,6 +205,8 @@ class Player
     @description = "civilian"
     @spawn_limit = nil
     @weakness = nil
+    @crit_dice = nil
+    @crit_number = 1
   end
   
   def ==(other)
@@ -220,6 +228,11 @@ class Player
     return self if other.weakness && our_roll == other.weakness
     # We can only hit weaknesses during our fights
     
+    # See if we crit
+    if @crit_dice && @crit_dice > 0
+      return self if result.count(@crit_number) >= @crit_dice  
+    end
+
     # Otherwise, let the dice do the talking.
     if our_roll > their_roll
       return self

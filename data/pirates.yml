@@ -135,6 +135,8 @@ hotspots:
 players: 
 - !ruby/object:Player 
   controller: :person
+  crit_dice: 2
+  crit_number: 1
   description: buccaneer
   dice_to_roll: 2
   lethal_conversion: false
@@ -147,6 +149,8 @@ players:
   weakness: 
 - !ruby/object:Player 
   controller: :cpu
+  crit_dice: 
+  crit_number: 1
   description: living dead
   dice_to_roll: 1
   lethal_conversion: true
@@ -159,6 +163,8 @@ players:
   weakness: 
 - !ruby/object:Player 
   controller: :neutral
+  crit_dice: 
+  crit_number: 1
   description: civilian
   dice_to_roll: 1
   lethal_conversion: false

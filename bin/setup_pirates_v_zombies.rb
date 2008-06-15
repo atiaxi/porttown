@@ -15,6 +15,8 @@ def piratesVzombies
   pirates.dice_to_roll = 2
   pirates.loot_threshold = 4
   pirates.spawn_limit = 10
+  pirates.crit_dice = 2
+  pirates.crit_number = 1
   pirates.description = "buccaneer"
   zombies = Player.new(1, 'Zombies')
   zombies.controller = :cpu

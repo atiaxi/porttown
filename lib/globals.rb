@@ -18,6 +18,11 @@ $ai_speed = 2.5
 $verbose = false
 
 class Array
+  # I could have sworn this already existed
+  def count(item)
+    return (self.select { |x| x == item }).size
+  end
+  
   def random
     if size > 0
       return self[rand(size)]
