@@ -38,7 +38,7 @@ class FightPhase < Phase
     @mqv.update(delay)
     if @map.automated
       @waited += delay
-      Engine.instance.done if @waited > 3.0
+      Engine.instance.done if @waited > $ai_speed * 2
     end
   end
 end

@@ -13,12 +13,17 @@ def piratesVzombies
   pirates.controller = :person
   pirates.spawn_roll = 3
   pirates.dice_to_roll = 2
+  pirates.loot_threshold = 4
+  pirates.description = "buccaneer"
   zombies = Player.new(1, 'Zombies')
   zombies.controller = :cpu
   zombies.spawn_roll = 6
   zombies.dice_to_roll = 1
+  zombies.lethal_conversion = true
+  zombies.description = "living dead"
   neutral = Player.new(2, 'Civilians')
   neutral.controller = :neutral
+  neutral.dice_to_roll = 1
   
   map.add_player(pirates)
   map.add_player(zombies)

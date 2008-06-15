@@ -31,20 +31,28 @@ class FightController
       @map.active_players.each do | player |
         other_players = @map.other_players(player)
         times = 0
+        # Fight everyone else here
         while times < spot.forces_for(player)
           times += 1
-          result = roll(player.dice_to_roll)
-          our_roll = result.max
+          
           other_players.each do | other |
-            next if spot.forces_for(other) <= 0
-            their_roll = roll(other.dice_to_roll).max
-            if our_roll > their_roll
+            next unless spot.forces_for(other) > 0
+            winner = player.fight(other)
+            if winner == player
               spot.attrit(other, 1)
-            elsif their_roll > our_roll
+#              if player.lethal_conversion
+#                spot.reinforce(player, 1)
+#              end
+            elsif winner == other
               spot.attrit(player, 1)
+#              if other.lethal_conversion
+#                spot.reinforce(other, 1)
+#              end
             end
           end
         end
+        # See if we respawn anything
+        spawn_bonuses(spot, player)
       end
       compile_report_for(spot, original_forces)
     end
@@ -54,6 +62,47 @@ class FightController
   def report(string)
     @queue << string if @queue
     #Engine.instance.logger.info(string)
+  end
+  
+  def spawn_bonuses(spot, player)
+    # Do we loot people to pay for more of us?
+    bodies = player.loot_threshold
+    if bodies
+      total = 0
+      @map.neutral_players.each do  | neutral |
+        next unless spot.forces_for(player) > 0
+        total += (spot.forces_for(neutral) / bodies).to_i
+      end
+      
+      if total > 0
+        spot.reinforce(player, total)
+        report("#{player.name} looted enough at #{spot.name} to pay for "+
+          "#{total} more #{player.description}!")
+      end
+    end
+    
+    # Do we convert people into the living dead?
+    if player.lethal_conversion
+      
+      @map.neutral_players.each do | neutral |
+        next unless spot.forces_for(player) > 0
+        next unless spot.forces_for(neutral) > 0
+        
+        victor = player.fight(neutral)
+        if victor == player
+          spot.attrit(neutral, 1)
+          spot.reinforce(player, 1)
+          report("#{player.name} converted a #{neutral.description} "+
+            " into a #{player.description} at #{spot.name}!")
+        elsif victor == neutral
+          spot.attrit(player, 1)
+          report("The #{neutral.name} in #{spot.name} drove off the "+
+            "#{player.description}!")
+        end
+      end
+      
+    end
+    
   end
   
 end
@@ -137,9 +186,9 @@ end
 
 class RandomAIController < AIController
   
-  def initialize(player, map, speed = 1.0)
+  def initialize(player, map, speed = nil)
     super(player,map)
-    @speed = speed
+    @speed = speed || $ai_speed
     @counted = 0.0
   end
   

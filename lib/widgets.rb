@@ -1,4 +1,4 @@
-
+require 'globals'
 
 class Widget
   attr_accessor :rect
@@ -46,9 +46,9 @@ class Message
   attr_accessor :time
   attr_accessor :msg
   
-  def initialize(message, display_for=2.0)
+  def initialize(message, display_for=nil)
     @msg = message
-    @time = display_for
+    @time = display_for || $text_speed
   end
   
   def <=>(other)

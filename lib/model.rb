@@ -124,6 +124,11 @@ class Map
     return @hotspots.detect { |spot| spot.name == name }
   end
   
+  # All the players controlled by :neutral
+  def neutral_players
+    return @players.select { |p| p.controller == :neutral }
+  end
+  
   # The opponents of the given player - all active players other than this one.
   def other_players(player)
     return @players.reject do |p|
@@ -147,6 +152,8 @@ end
 
 class Player
   
+  attr_accessor :description
+  
   attr_accessor :side, :name
   attr_accessor :spawn_roll
   attr_accessor :number_to_spawn
@@ -156,6 +163,14 @@ class Player
   # get a placement phase and don't do anything.
   attr_accessor :controller
   
+  # If non-nil, for every this many civilians, we get one of us.
+  attr_accessor :loot_threshold
+  
+  # If true, we do combat against civilians.  If we win, we convert one of them.
+  # We only get to do the fight once per round, regardless of how many of us
+  # there are.
+  attr_accessor :lethal_conversion
+  
   def initialize(side_number, fancy_name, control=:person)
     @side = side_number
     @name = fancy_name
@@ -163,10 +178,28 @@ class Player
     @spawn_roll = 0
     @number_to_spawn = 0
     @dice_to_roll = 0
+    @loot_threshold = nil
+    @lethal_conversion = false
+    @description = "civilian"
   end
   
   def ==(other)
     return @side == other.side
+  end
+  
+  # Does a fight against the given other player, returns the victor
+  # or nil on a tie
+  def fight(other)
+    result = roll(@dice_to_roll)
+    our_roll = result.max
+    their_roll = roll(other.dice_to_roll).max
+    if our_roll > their_roll
+      return self
+    elsif their_roll > our_roll
+      return other
+    else
+      return nil
+    end
   end
   
 end

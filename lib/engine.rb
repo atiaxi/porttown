@@ -188,7 +188,12 @@ class Engine
   
   def yaml_for(filename)
     fullpath = Engine.find_file(filename)
-    return YAML::load_file(fullpath)
+    if fullpath
+      return YAML::load_file(fullpath)
+    else
+      @logger.fatal("Unable to locate: #{filename}")
+      return nil
+    end
   end
   
 end

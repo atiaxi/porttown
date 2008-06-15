@@ -135,21 +135,30 @@ hotspots:
 players: 
 - !ruby/object:Player 
   controller: :person
+  description: buccaneer
   dice_to_roll: 2
+  lethal_conversion: false
+  loot_threshold: 4
   name: Pirates
   number_to_spawn: 0
   side: 0
   spawn_roll: 3
 - !ruby/object:Player 
   controller: :cpu
+  description: living dead
   dice_to_roll: 1
+  lethal_conversion: true
+  loot_threshold: 
   name: Zombies
   number_to_spawn: 0
   side: 1
   spawn_roll: 6
 - !ruby/object:Player 
   controller: :neutral
-  dice_to_roll: 0
+  description: civilian
+  dice_to_roll: 1
+  lethal_conversion: false
+  loot_threshold: 
   name: Civilians
   number_to_spawn: 0
   side: 2
