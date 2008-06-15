@@ -145,7 +145,13 @@ class Engine
     return @is_gem if @is_gem
     begin
       require 'rubygems'
-      Gem.activate(name, false)
+      # Apparently Gem.activate changed from 2 args to 1 at some point, and I
+      # can't find rdocs anywhere that tell me why, so this is a workaround
+      begin
+        Gem.activate(name)
+      rescue ArgumentError
+        Gem.activate(name, false)
+      end  
       @is_gem = true
     rescue LoadError
       @is_gem = false
