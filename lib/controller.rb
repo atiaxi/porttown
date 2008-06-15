@@ -40,14 +40,14 @@ class FightController
             winner = player.fight(other)
             if winner == player
               spot.attrit(other, 1)
-#              if player.lethal_conversion
-#                spot.reinforce(player, 1)
-#              end
+              if player.lethal_conversion
+                spot.reinforce(player, 1)
+              end
             elsif winner == other
               spot.attrit(player, 1)
-#              if other.lethal_conversion
-#                spot.reinforce(other, 1)
-#              end
+              if other.lethal_conversion
+                spot.reinforce(other, 1)
+              end
             end
           end
         end
@@ -209,7 +209,7 @@ class RandomAIController < AIController
     valid = @map.hotspots.select do | spot |
       spot.can_spawn_here?(@player)
     end
-    spawn_at(valid.random) if valid
+    spawn_at(valid.random) if valid.size > 0
   end
   
 end

@@ -22,6 +22,7 @@ def piratesVzombies
   zombies.dice_to_roll = 1
   zombies.lethal_conversion = true
   zombies.spawn_limit = 15
+  zombies.weakness = nil
   zombies.description = "living dead"
   neutral = Player.new(2, 'Civilians')
   neutral.controller = :neutral

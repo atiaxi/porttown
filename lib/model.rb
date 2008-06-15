@@ -183,6 +183,10 @@ class Player
   # The default, nil, means no limit.
   attr_accessor :spawn_limit
   
+  # If non-nil, this player is weak to the given die roll.  In a fight, if the
+  # opposing player has this number as their best roll, we automatically lose
+  attr_accessor :weakness
+  
   def initialize(side_number, fancy_name, control=:person)
     @side = side_number
     @name = fancy_name
@@ -194,6 +198,7 @@ class Player
     @lethal_conversion = false
     @description = "civilian"
     @spawn_limit = nil
+    @weakness = nil
   end
   
   def ==(other)
@@ -210,6 +215,12 @@ class Player
     result = roll(@dice_to_roll)
     our_roll = result.max
     their_roll = roll(other.dice_to_roll).max
+    
+    # check weaknesses
+    return self if other.weakness && our_roll == other.weakness
+    # We can only hit weaknesses during our fights
+    
+    # Otherwise, let the dice do the talking.
     if our_roll > their_roll
       return self
     elsif their_roll > our_roll

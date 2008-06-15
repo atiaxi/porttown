@@ -144,6 +144,7 @@ players:
   side: 0
   spawn_limit: 10
   spawn_roll: 3
+  weakness: 
 - !ruby/object:Player 
   controller: :cpu
   description: living dead
@@ -155,6 +156,7 @@ players:
   side: 1
   spawn_limit: 15
   spawn_roll: 6
+  weakness: 
 - !ruby/object:Player 
   controller: :neutral
   description: civilian
@@ -166,3 +168,4 @@ players:
   side: 2
   spawn_limit: 
   spawn_roll: 0
+  weakness: 
