@@ -37,8 +37,17 @@ def parse_args(args = ARGV)
         $ai_speed = ms /1000.0
     end
     
+    opts.on("-v", "--verbose", "Log notices") do |verb|
+      $verbose = verb
+    end
+    
     opts.on_tail("-h", "--help", "Show this message") do
       puts opts
+      exit
+    end
+    
+    opts.on_tail("--version", "Show version") do
+      puts "porttown v#{$PORTTOWN_VERSION.join(".")}"
       exit
     end
     

@@ -4,36 +4,21 @@ require 'logger'
 require 'yaml'
 require 'singleton'
 
-class MessageQueue
-  
-  def initialize
-    @queue = []
-  end
-  
-  def <<(msg)
-    add_message(msg)
-  end
-  
-  def add_message(msg)
-    @queue << msg.as_message
-  end
-  
-  def clear
-    @queue.clear
-  end
-  
-  def each(&proc)
-    return @queue.each(&proc)
-  end
-  
-  def update(delay)
-    @queue.dup.each do | m |
-      m.time -= delay
-      @queue.delete(m) if m.time <= 0
-    end
-  end
-  
+begin
+  require 'rubygems'
+  gem 'rubygame', '>=2.3.0'
+rescue LoadError
+  # Either no gems or no rubygame
 end
+
+begin
+  require 'rubygame'
+rescue LoadError
+  puts "This game requires Rubygame 2.3.0 or better"
+  exit
+end
+
+require 'message'
 
 class Phase
   
@@ -74,8 +59,7 @@ class Engine
   attr_reader :messages
   
   def initialize()
-    flags = Rubygame::DOUBLEBUF | Rubygame::HWSURFACE
-    @screen = Rubygame::Screen.new( [ 800, 600], 0, flags)
+    @screen = nil
     @phases = []
     @images = {}
     @fonts = {}
@@ -172,13 +156,20 @@ class Engine
       elapsed = clock.tick
       self.update(phase,elapsed/1000.0)
       
-      @screen.fill(Rubygame::Color[:black])
-      phase.draw(@screen)
-      @screen.flip
+      screen.fill(Rubygame::Color[:black])
+      phase.draw(screen)
+      screen.flip
       
       Rubygame::Clock.wait(200)
     end
     Rubygame::quit
+  end
+  
+  def screen
+    return @screen if @screen
+    flags = Rubygame::DOUBLEBUF | Rubygame::HWSURFACE
+    @screen = Rubygame::Screen.new( [ 800, 600], 0, flags)
+    return @screen
   end
   
   def update(phase,delay)

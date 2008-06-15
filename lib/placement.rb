@@ -112,6 +112,8 @@ end
 
 class PlacementPhase < Phase
   
+  attr_reader :controller
+  
   def initialize(map, forPlayer)
     super()
     @player = forPlayer

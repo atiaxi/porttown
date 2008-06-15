@@ -61,7 +61,7 @@ class FightController
   
   def report(string)
     @queue << string if @queue
-    #Engine.instance.logger.info(string)
+    Engine.instance.logger.info(string) if $verbose
   end
   
   def spawn_bonuses(spot, player)

@@ -13,6 +13,7 @@ $MQV_COLOR = [0,0,255,0]
 
 $text_speed = 3.0
 $ai_speed = 2.5
+$verbose = false
 
 class Array
   def random

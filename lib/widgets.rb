@@ -1,4 +1,5 @@
 require 'globals'
+require 'message'
 
 class Widget
   attr_accessor :rect
@@ -37,38 +38,6 @@ class Label < Widget
     @rect.h = @image.h
   end
   
-end
-
-class Message
-  
-  include Comparable
-  
-  attr_accessor :time
-  attr_accessor :msg
-  
-  def initialize(message, display_for=nil)
-    @msg = message
-    @time = display_for || $text_speed
-  end
-  
-  def <=>(other)
-    return self.time <=> other.time
-  end
-  
-  def as_message
-    return self
-  end
-  
-  def to_s
-    return msg
-  end
-  
-end
-
-class String
-  def as_message
-    return Message.new(self)
-  end
 end
 
 class MessageQueueView < Widget

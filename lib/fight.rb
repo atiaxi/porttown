@@ -30,6 +30,10 @@ class FightPhase < Phase
     Engine.instance.done
   end
   
+  def controller
+    return @fc
+  end
+  
   def draw(screen)
     super
   end
