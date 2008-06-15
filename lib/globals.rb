@@ -14,7 +14,7 @@
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 $GEM_NAME = 'porttown'
-$PORTTOWN_VERSION = [0,2,0]
+$PORTTOWN_VERSION = [1,0,0]
 
 $HOTSPOT_FONT = "LiberationSans-Regular.ttf"
 $HOTSPOT_COLOR = [0, 0, 0, 0]
