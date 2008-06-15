@@ -7,6 +7,7 @@ def parse_args(args = ARGV)
   options.controllers = []
   options.map = 'pirates.yml'
   options.gui = true
+  options.repeat = 1
   
   opts = OptionParser.new do |opts|
     opts.banner = "Usage: porttown [options]"    
@@ -39,6 +40,11 @@ def parse_args(args = ARGV)
     
     opts.on("-v", "--verbose", "Log notices") do |verb|
       $verbose = verb
+    end
+    
+    opts.on("-r", "--repeat [times]", Integer, "Re-run the scenario",
+      "(Headless mode only)") do |times|
+      options.repeat = times
     end
     
     opts.on_tail("-h", "--help", "Show this message") do

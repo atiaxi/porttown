@@ -161,8 +161,15 @@ class PlacementPhase < Phase
       if model.can_spawn_here?(@player)
         @controller.spawn_at(model)
       else
-        spawnmsg = "You can only spawn in places you control or "+
-          "places next to them"
+        spawnmsg = ''
+        if (@player.spawn_limit &&
+            model.forces_for(@player) >= @player.spawn_limit)
+          spawnmsg = "#{model.name} cannot hold more than " +
+            "#{@player.spawn_limit} #{@player.name}"
+        else
+          spawnmsg = "You can only spawn in places you control or "+
+            "places next to them"
+        end
         Engine.instance.messages << spawnmsg
       end
     end

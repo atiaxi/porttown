@@ -30,6 +30,9 @@ class Hotspot
   end
   
   def can_spawn_here?(player)
+    amount = forces_for(player)
+    limit = player.spawn_limit
+    return false if limit && amount >= limit
     return true if base_of?(player)
     return true if forces_for(player) > 0
     return @connected_to.detect do | spot |
@@ -97,6 +100,11 @@ class Map
   # The map is automated if every active player is a CPU player
   def automated
     return !active_players.detect { |player| player.controller != :cpu }
+  end
+
+  # Returns the first available spawning point, or nil
+  def can_spawn_anywhere?(player)
+    return @hotspots.detect { |s| s.can_spawn_here?(player) }
   end
   
   # This player is finished, mark them eliminated.
@@ -171,6 +179,10 @@ class Player
   # there are.
   attr_accessor :lethal_conversion
   
+  # The maximum number of our people we can have at any one hotspot
+  # The default, nil, means no limit.
+  attr_accessor :spawn_limit
+  
   def initialize(side_number, fancy_name, control=:person)
     @side = side_number
     @name = fancy_name
@@ -181,6 +193,7 @@ class Player
     @loot_threshold = nil
     @lethal_conversion = false
     @description = "civilian"
+    @spawn_limit = nil
   end
   
   def ==(other)

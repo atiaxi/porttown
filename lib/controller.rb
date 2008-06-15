@@ -65,6 +65,10 @@ class FightController
   end
   
   def spawn_bonuses(spot, player)
+    # Only do bonuses if we could already spawn here
+    # (i.e. we're not at spawn_limit)
+    return false unless spot.can_spawn_here?(player)
+
     # Do we loot people to pay for more of us?
     bodies = player.loot_threshold
     if bodies
@@ -133,6 +137,17 @@ class TurnController
     #log.info("#{@player.name} rolled to spawn #{@rolled.inspect}")  
     @player.number_to_spawn = @rolled[0]
     #log.debug("  Number to spawn is: #{@player.number_to_spawn}")
+    if @player.controller == :neutral
+      Engine.instance.messages << "#{@player.name} was eliminated, skipping"
+      @player.number_to_spawn = 0
+      return
+    end
+    unless @map.can_spawn_anywhere?(@player)
+      Engine.instance.messages << "#{@player.name} has nowhere to spawn, and "+
+        "loses a turn"
+      @player.number_to_spawn = 0      
+      return
+    end
   end
   
   def click(loc)
@@ -194,7 +209,7 @@ class RandomAIController < AIController
     valid = @map.hotspots.select do | spot |
       spot.can_spawn_here?(@player)
     end
-    spawn_at(valid.random)
+    spawn_at(valid.random) if valid
   end
   
 end

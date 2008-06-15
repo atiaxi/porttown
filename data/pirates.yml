@@ -142,6 +142,7 @@ players:
   name: Pirates
   number_to_spawn: 0
   side: 0
+  spawn_limit: 10
   spawn_roll: 3
 - !ruby/object:Player 
   controller: :cpu
@@ -152,6 +153,7 @@ players:
   name: Zombies
   number_to_spawn: 0
   side: 1
+  spawn_limit: 15
   spawn_roll: 6
 - !ruby/object:Player 
   controller: :neutral
@@ -162,4 +164,5 @@ players:
   name: Civilians
   number_to_spawn: 0
   side: 2
+  spawn_limit: 
   spawn_roll: 0
